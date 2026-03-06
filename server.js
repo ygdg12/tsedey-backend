@@ -21,7 +21,7 @@ const CLIENT_URL_PROD = process.env.CLIENT_URL_PROD;
 
 connectDB();
 
-// Midd
+// Mid
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(
