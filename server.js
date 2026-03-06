@@ -9,6 +9,8 @@ const authRoutes = require("./src/routes/authRoutes");
 const collectionRoutes = require("./src/routes/collectionRoutes");
 const itemRoutes = require("./src/routes/itemRoutes");
 const productRoutes = require("./src/routes/productRoutes");
+const categoryRoutes = require("./src/routes/categoryRoutes");
+const uploadRoutes = require("./src/routes/uploadRoutes");
 const { notFoundHandler, errorHandler } = require("./src/middleware/errorHandler");
 
 const app = express();
@@ -36,6 +38,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/collections", collectionRoutes);
 app.use("/api", itemRoutes); // items routes
 app.use("/api/products", productRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/upload-image", uploadRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
