@@ -23,6 +23,11 @@ const mapItemToProduct = (item) => ({
   inStock: item.inStock,
   soldOut: item.inStock === false,
   collection: item.collection,
+  category: item.category,
+  vibe: item.vibe,
+  tag: item.tag,
+  intensity: item.intensity,
+  colorsAvailable: item.colorsAvailable || [],
 });
 
 // GET /api/products (public)
@@ -48,7 +53,11 @@ const createProduct = async (req, res, next) => {
       price,
       soldOut,
       image,
-      // extra fields are accepted but currently ignored by the Item schema
+      tag,
+      intensity,
+      category,
+      vibe,
+      colorsAvailable,
     } = req.body;
 
     if (!label || price === undefined) {
@@ -66,6 +75,11 @@ const createProduct = async (req, res, next) => {
       price,
       inStock: soldOut ? false : true,
       image,
+      tag,
+      intensity,
+      category,
+      vibe,
+      colorsAvailable,
     });
 
     res.status(201).json({ success: true, data: mapItemToProduct(item) });
@@ -84,7 +98,11 @@ const updateProduct = async (req, res, next) => {
       price,
       soldOut,
       image,
-      // other optional fields ignored for now
+      tag,
+      intensity,
+      category,
+      vibe,
+      colorsAvailable,
     } = req.body;
 
     const item = await Item.findById(id);
@@ -99,6 +117,11 @@ const updateProduct = async (req, res, next) => {
     if (price !== undefined) item.price = price;
     if (soldOut !== undefined) item.inStock = soldOut ? false : true;
     if (image !== undefined) item.image = image;
+    if (tag !== undefined) item.tag = tag;
+    if (intensity !== undefined) item.intensity = intensity;
+    if (category !== undefined) item.category = category;
+    if (vibe !== undefined) item.vibe = vibe;
+    if (colorsAvailable !== undefined) item.colorsAvailable = colorsAvailable;
 
     await item.save();
 

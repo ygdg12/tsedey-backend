@@ -27,6 +27,24 @@ const itemSchema = new mongoose.Schema(
     image: {
       type: String, // Cloudinary URL
     },
+    // Frontend-specific metadata for filtering and display
+    category: {
+      type: String,
+    }, // e.g. "set", "jumpsuit"
+    vibe: {
+      type: String,
+    }, // e.g. "studio", "training"
+    tag: {
+      type: String,
+    }, // short label like "Set"
+    intensity: {
+      type: String,
+    },
+    colorsAvailable: [
+      {
+        type: String,
+      },
+    ],
   },
   { timestamps: true }
 );
