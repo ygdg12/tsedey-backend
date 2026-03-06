@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
-  const uri = process.env.MONGO_URI;
+  const uri ="mongodb+srv://yared2:A2pFYx1hTGXXSjJx@cluster0.6xvuaoo.mongodb.net/?appName=Cluster0" ;
 
   if (!uri) {
     console.error("MONGO_URI is not set in environment variables.");
