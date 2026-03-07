@@ -36,7 +36,7 @@ const updateCategories = async (req, res, next) => {
 
     const config = await CategoryConfig.findOneAndUpdate(
       { key: "default" },
-      { categories },
+      { $set: { categories } },
       { new: true, upsert: true }
     );
 
