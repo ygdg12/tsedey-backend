@@ -11,6 +11,7 @@ const itemRoutes = require("./src/routes/itemRoutes");
 const productRoutes = require("./src/routes/productRoutes");
 const categoryRoutes = require("./src/routes/categoryRoutes");
 const uploadRoutes = require("./src/routes/uploadRoutes");
+const cartRoutes = require("./src/routes/cartRoutes");
 const { notFoundHandler, errorHandler } = require("./src/middleware/errorHandler");
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/api", itemRoutes); // items routes
 app.use("/api/products", productRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/upload-image", uploadRoutes);
+app.use("/api/cart", cartRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {
