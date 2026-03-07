@@ -1,47 +1,49 @@
-const CATEGORY_DOC_ID = "default-categories";
+const CategoryConfig = require("../models/Category");
 
-// Default fallback categories, mirroring the frontend defaults
 const DEFAULT_CATEGORIES = [
-  { id: "all", label: "All looks", type: "all" },
+  { id: "all", label: "All looks", type: "all", value: "" },
   { id: "sets", label: "Sets", type: "category", value: "set" },
   { id: "jumpsuits", label: "Jumpsuits", type: "category", value: "jumpsuit" },
   { id: "studio", label: "Studio", type: "vibe", value: "studio" },
   { id: "training", label: "Training", type: "vibe", value: "training" },
 ];
 
-// In-memory storage for simplicity; replace with a real model if needed
-let storedCategories = null;
-
-// GET /api/categories
+// GET /api/categories (public)
 const getCategories = async (req, res, next) => {
   try {
-    if (!storedCategories) {
-      storedCategories = DEFAULT_CATEGORIES;
+    let config = await CategoryConfig.findOne({ key: "default" });
+    if (!config || !config.categories?.length) {
+      return res.json(DEFAULT_CATEGORIES);
     }
-    res.json(storedCategories);
+    res.json(config.categories);
   } catch (err) {
     next(err);
   }
 };
 
-// PUT /api/categories
+// PUT /api/categories (admin only)
 const updateCategories = async (req, res, next) => {
   try {
-    const { categories } = req.body;
+    const incoming = Array.isArray(req.body.categories) ? req.body.categories : [];
 
-    if (!Array.isArray(categories)) {
-      return res
-        .status(400)
-        .json({ success: false, error: "categories must be an array" });
-    }
+    const categories = incoming.map((cat) => {
+      const label = (cat?.label || "").trim();
+      const value = cat?.value ?? (label ? label.toLowerCase().replace(/\s+/g, "-") : "");
+      const id = cat?.id ?? value;
+      const type = cat?.type || "category";
+      return { id, label, type, value };
+    });
 
-    storedCategories = categories;
+    const config = await CategoryConfig.findOneAndUpdate(
+      { key: "default" },
+      { categories },
+      { new: true, upsert: true }
+    );
 
-    res.json({ success: true, data: storedCategories, id: CATEGORY_DOC_ID });
+    res.json({ success: true, categories: config.categories });
   } catch (err) {
     next(err);
   }
 };
 
 module.exports = { getCategories, updateCategories, DEFAULT_CATEGORIES };
-
